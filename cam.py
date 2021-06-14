@@ -6,9 +6,6 @@ import statistics
 import matplotlib.colors
 import numpy
 import time
-import requests
-import base64
-import json
 import numpy
 import os
 
