@@ -10,11 +10,13 @@
 * Kaplar eftir þörfum
 * (Raspberry Pi Camera V2)
 
+Þessir hlutir eru að miklu leyti fáanlegir í Öreind, Computer.is, Elko og hjá [SparkFun](https://sparkfun.com).
+
 ## Kóði í Arduino
 Fyrst þarf að setja upp [Arduino IDE](https://www.arduino.cc/en/software). Þar eru sóttir pakkar í Library Manager fyrir þá skynjara sem keyptir hafa verið. Svo er hægt að nota __hita-raka.ino__ skrána héðan til að hlaða á stýrispjaldið.
 
 ## Tenging skynjara við Arduino
-Athugið að í Arduino Nano eru pinnarnir ekki númeraðir 1, 2, 3 o.s.frv., heldur A1, A2, A3 o.s.frv.
+Athugið að í Arduino Nano eru pinnarnir ekki númeraðir 1, 2, 3 o.s.frv., heldur A1, A2, A3 o.s.frv. Á Arduino Nano er SDL tengið (fyrir Qwiic tengingarnar) á A4 og SCL á A5.
 
 ## Aflestur skynjara í Raspberry Pi
 Forritið __read.py__ er skrifað í Python 3.8 og þarfnast nokkurra pakka þegar það er keyrt. Leiðbeiningar um notkun _pip_ eru [fáanlegar hér](https://packaging.python.org/tutorials/installing-packages/).
