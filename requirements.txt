@@ -1,0 +1,11 @@
+numpy==1.19.2
+urllib3==1.22
+backports.statistics==0.1.0
+Cython==0.29.23
+ipaddr==2.2.0
+matplotlib==3.4.2
+ordereddict==1.1
+picamera==1.13
+Pillow==8.2.0
+pyserial==3.5
+wincertstore==0.2.1

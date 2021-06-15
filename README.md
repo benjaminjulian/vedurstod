@@ -21,6 +21,8 @@ Athugið að í Arduino Nano eru pinnarnir ekki númeraðir 1, 2, 3 o.s.frv., he
 ## Aflestur skynjara í Raspberry Pi
 Forritið __read.py__ er skrifað í Python 3.8 og þarfnast nokkurra pakka þegar það er keyrt. Leiðbeiningar um notkun _pip_ eru [fáanlegar hér](https://packaging.python.org/tutorials/installing-packages/).
 
+Til þess að setja upp þau forritasöfn sem þarf til að keyra kóðann keyrið þá skipunina `pip3 install -r requirements.txt`
+
 ## Myndgreining í Raspberry Pi
 Forritið __cam.py__ er skrifað í Python 3.8 og þarfnast meðal annars _Pillow_ pakkans. Leiðbeiningar um uppsetningu hans eru [fáanlegar hér](https://pillow.readthedocs.io/en/stable/installation.html). Til að leyfa notkun myndavélarinnar í Pi þarf að breyta grunnstillingum tölvunnar í skipanalínu gegnum _raspi-config_ skipunina.
 
