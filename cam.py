@@ -141,7 +141,6 @@ while True:
 		f.close()
 		camera.iso = 100					# Núllstilli myndavélina
 		camera.shutter_speed = 0
-		print(edges,contrast)
 	except Exception as e:
 		print('Villa: ' + str(e))
-	time.sleep(10*60)
+	time.sleep(10*60)						# Næstum óþarft því útreikningarnir taka heila eilífð
