@@ -9,7 +9,7 @@ import time
 import numpy
 import os
 
-def get_hsv(pixels):
+def get_hsv(pixels):							# Fá meðaltal af lit, litadýpt og birtustigi (HSV) myndpunktanna
 	i_h = matplotlib.colors.rgb_to_hsv(pixels/255)
 	h = int(numpy.average(i_h[:,:,0]) * 360)
 	s = int(numpy.average(i_h[:,:,1]) * 100)
@@ -19,14 +19,14 @@ def get_hsv(pixels):
 	std_v = int(numpy.std(i_h[:,:,2]) * 100)
 	return [h,s,v]
 
-def get_stds(pixels):
+def get_stds(pixels): # Fá staðalfrávik af HSV-gildum myndpunktanna
 	i_h = matplotlib.colors.rgb_to_hsv(pixels/255)
 	std_h = int(numpy.std(i_h[:,:,0]) * 360)
 	std_s = int(numpy.std(i_h[:,:,1]) * 100)
 	std_v = int(numpy.std(i_h[:,:,2]) * 100)
 	return std_h,std_s,std_v
 
-def get_edginess(img):
+def get_edginess(img):							# Setja síu á myndina sem sýnir bara brúnir, tel magn brúnanna yfir alla myndina
 	# Apply gray scale
 	gray_img = numpy.round(0.299 * img[:, :, 0] +
 						0.587 * img[:, :, 1] +
@@ -76,30 +76,29 @@ def get_edginess(img):
 
 	return int(numpy.average(newgradientImage))
 
-def get_contrast(pixels):
+def get_contrast(pixels):						# Fá staðalfrávik í birtustigi myndpunktanna
 	p = getgrays(pixels)
 	return int(numpy.std(p))
 
-def getgrays(rgb):
+def getgrays(rgb): # Prenta myndina í gráu
 	return numpy.dot(rgb[...,:3], [0.2989, 0.5870, 0.1140])
-
 
 col_data_path = "data/image_data.csv"
 
-if not os.path.isfile(col_data_path):
+if not os.path.isfile(col_data_path): 					# Ef gagnaskráin er ekki til staðar er hún búin til og haus prentaður
 	f = open(col_data_path, "w")
 	f.write("time,shutter,gain,h,s,v,std_h,std_s,std_v,edges,contrast\n")
 	f.close()
 
-camera = PiCamera()
+camera = PiCamera()							# Ræsi myndavélina. Þessar stillingar reyndust bestar eftir einhverja prófun:
 camera.exposure_mode = 'backlight'
 camera.awb_mode = 'sunlight'
 camera.iso = 100
 
 while True:
 	now = datetime.now()
-	filename = "imgdump/" + now.strftime("%Y%m%dT%H%M%S.jpg")
-	camera.capture("processing.jpg")
+	filename = "imgdump/" + now.strftime("%Y%m%dT%H%M%S.jpg")	# Lokaútgáfa myndarinnar verður vistuð hér
+	camera.capture("processing.jpg")				# Vinnslumyndin er vistuð hér - gæti þurft að taka aðra
 	speed = str(int(camera.exposure_speed))
 	gain = str(float(camera.analog_gain))
 	i = Image.open("processing.jpg")
@@ -111,12 +110,12 @@ while True:
 	a_g = str(i_g)
 	a_b = str(i_b)
 	print('iso: ' + str(camera.iso) + ', spd: ' + str(camera.exposure_speed), end="\r")
-	if (i_r + i_g + i_b) < 100:
-		if camera.iso < 800:
+	if (i_r + i_g + i_b) < 100:					# Athugar hvort myndin sé of dimm (min=0, max=3*255)...
+		if camera.iso < 800:					# ...og hækkar þá næmni myndavélarinnar ef það er hægt
 			camera.iso = camera.iso * 2
-			continue
-	elif (i_r + i_g + i_b) > 600:
-		if int(camera.exposure_speed) == 0:
+			continue					# og sleppir myndgreiningunni -- tekur aðra mynd á nýjum stillingum
+	elif (i_r + i_g + i_b) > 600:					# Athugar hvort myndin sé of björt...
+		if int(camera.exposure_speed) == 0:			# ...og ef hægt er að stytta lokatímann er það gert
 			pass
 		else:
 			camera.shutter_speed = int(camera.exposure_speed * 0.5)
@@ -125,17 +124,14 @@ while True:
 		print('iso: ' + str(camera.iso) + ', spd: ' + str(camera.exposure_speed) + " at " + now.strftime("%H:%M:%S"))
 		speed = str(int(camera.exposure_speed))
 		gain = str(float(camera.analog_gain))
-		i.save("latest.jpg")
-		i.save(filename)
-		print("mynd vistud")
+		i.save("latest.jpg")					# Vista myndina einu sinni sem nýjustu mynd...
+		i.save(filename)					# ...og einu sinni fyrir gagnabankann
 		p = numpy.asarray(i)
-		print("mynd ummyndud")
 		hsv = get_hsv(p)
-		print("mynd reiknud")
 		contrast = get_contrast(p)
 		stds = get_stds(p)
 		edges = get_edginess(p)
-		f = open(col_data_path, "a")
+		f = open(col_data_path, "a")				# Skrifa alla kvarða myndarinnar í CSV skrána
 		f.write(now.strftime("%Y-%m-%dT%H:%M:%SZ,"))
 		f.write(speed + "," + gain + ",")
 		f.write(",".join(str(x) for x in get_hsv(p)) + ",")
@@ -143,7 +139,7 @@ while True:
 		f.write(str(edges) + ",")
 		f.write(str(contrast) + "\n")
 		f.close()
-		camera.iso = 100
+		camera.iso = 100					# Núllstilli myndavélina
 		camera.shutter_speed = 0
 		print(edges,contrast)
 	except Exception as e:
